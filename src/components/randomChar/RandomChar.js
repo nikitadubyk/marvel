@@ -7,11 +7,6 @@ import mjolnir from '../../resources/img/mjolnir.png';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props);
-        this.updataChar();
-    }
-
     state = {
         char: {},
         loading: true,
@@ -29,12 +24,17 @@ class RandomChar extends Component {
     };
 
     updataChar = () => {
+        this.setState({ loading: true });
         const id = Math.floor(Math.random() * (1011400 - 1011000)) + 1011000;
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
     };
+
+    componentDidMount() {
+        this.updataChar();
+    }
 
     render() {
         const { char, loading, error } = this.state;
@@ -77,12 +77,16 @@ class RandomChar extends Component {
 
 const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki } = char;
+    const style =
+        thumbnail ===
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
     return (
         <div className='randomchar__block'>
             <img
                 src={thumbnail}
                 alt='Random character'
                 className='randomchar__img'
+                style={style ? { objectFit: 'contain' } : null}
             />
             <div className='randomchar__info'>
                 <p className='randomchar__name'>{name}</p>
