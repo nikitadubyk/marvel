@@ -30,7 +30,11 @@ class CharList extends Component {
                 item.thumbnail ===
                 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
             return (
-                <li className='char__item' key={item.id}>
+                <li
+                    className='char__item'
+                    key={item.id}
+                    onClick={() => this.props.onCharSelected(item.id)}
+                >
                     <img
                         src={item.thumbnail}
                         alt='abyss'
