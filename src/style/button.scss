@@ -25,7 +25,7 @@
             border-color: $main-color transparent;
             border-style: solid;
             border-width: 0 0 10px 10px;
-            content: "";
+            content: '';
             display: block;
             position: absolute;
             left: 0;
@@ -36,7 +36,7 @@
             border-color: $main-color transparent;
             border-style: solid;
             border-width: 0 0 10px 10px;
-            content: "";
+            content: '';
             display: block;
             position: absolute;
             right: 0;
@@ -45,7 +45,8 @@
             transition: none;
         }
     }
-    &__main, &__secondary {
+    &__main,
+    &__secondary {
         &:hover {
             color: #fff;
         }
@@ -58,7 +59,7 @@
                 transition: none;
             }
             &::after {
-                border-color: $grey transparent; 
+                border-color: $grey transparent;
                 transition: none;
             }
         }
@@ -69,7 +70,6 @@
         height: 10px;
         margin-left: 10px;
         transition: none;
-
     }
     &::after {
         content: '';
@@ -77,15 +77,19 @@
         height: 10px;
         margin-right: 10px;
         transition: none;
-
     }
-    &.button__main::before, &.button__main::after {
+    &.button__main::before,
+    &.button__main::after {
         background-color: $main-color;
     }
-    &.button__secondary::before, &.button__secondary::after {
+    &.button__secondary::before,
+    &.button__secondary::after {
         background-color: $grey;
     }
     &:hover {
         transform: translateY(-5px);
+    }
+    &:disabled {
+        filter: grayscale(0.5);
     }
 }
