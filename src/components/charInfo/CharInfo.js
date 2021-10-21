@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import './charInfo.scss';
@@ -77,9 +78,13 @@ const View = ({ char }) => {
                     : null}
                 {comics.slice(0, 10).map((item, i) => {
                     return (
-                        <li className='char__comics-item' key={i}>
+                        <Link
+                            to={`/comics/${item.resourceURI.substring(43)}`}
+                            className='char__comics-item'
+                            key={i}
+                        >
                             {item.name}
-                        </li>
+                        </Link>
                     );
                 })}
             </ul>
