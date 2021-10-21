@@ -19,7 +19,6 @@ const ComicsList = props => {
     const onRequestComics = (offset, initial) => {
         initial ? setNewComicsLoading(false) : setNewComicsLoading(true);
         getAllComics(offset).then(res => {
-            console.log(res);
             onComicsListLoaded(res);
         });
     };
@@ -68,13 +67,10 @@ const ComicsList = props => {
             <button
                 className='button button__main button__long'
                 onClick={() => onRequestComics(offset)}
+                style={{ display: comicsEnded ? 'none' : 'block' }}
+                disabled={newComicsLoading ? true : false}
             >
-                <div
-                    className='inner'
-                    style={{ display: comicsEnded ? 'none' : 'block' }}
-                >
-                    load more
-                </div>
+                <div className='inner'>load more</div>
             </button>
         </div>
     );
