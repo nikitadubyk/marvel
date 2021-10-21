@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 
 import './charInfo.scss';
 import useMarvelServices from '../../services/MarvelServices';
@@ -10,6 +10,7 @@ import Skeleton from '../skeleton/Skeleton';
 
 const CharInfo = props => {
     const [char, setChar] = useState(null);
+    const [style, setStyle] = useState(false);
 
     const { loading, error, getCharacter, clearError } = useMarvelServices();
 
@@ -31,12 +32,44 @@ const CharInfo = props => {
         setChar(char);
     };
 
+    // меняем блок в позицию fixed при определенной прокрутке
+    function scroll() {
+        if (window.scrollY > 405) {
+            setStyle(true);
+        } else {
+            setStyle(false);
+        }
+    }
+    // добавляем эффект при загрузки страницы
+    useEffect(() => {
+        window.addEventListener('scroll', scroll);
+
+        // возвращаем функцию для отмены эффекта на других страницах
+        return () => {
+            window.removeEventListener('scroll', scroll);
+        };
+    }, []);
+
+    // отменяем useEffect при unMount странички
+
     const skeleton = char || loading || error ? null : <Skeleton />;
     const spinner = loading ? <Spinner /> : null;
     const errorMassage = error ? <ErrorMessage /> : null;
     const content = !(loading || error || !char) ? <View char={char} /> : null;
     return (
-        <div className='char__info'>
+        <div
+            className='char__info'
+            style={
+                style
+                    ? {
+                          position: 'fixed',
+                          width: '425px',
+                          right: '507px',
+                          top: '40px',
+                      }
+                    : null
+            }
+        >
             {skeleton}
             {spinner}
             {errorMassage}
