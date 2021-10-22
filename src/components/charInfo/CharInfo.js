@@ -32,25 +32,23 @@ const CharInfo = props => {
         setChar(char);
     };
 
-    // меняем блок в позицию fixed при определенной прокрутке
-    function scroll() {
-        if (window.scrollY > 405) {
-            setStyle(true);
-        } else {
-            setStyle(false);
-        }
-    }
-    // добавляем эффект при загрузки страницы
-    useEffect(() => {
-        window.addEventListener('scroll', scroll);
+    // // меняем блок в позицию fixed при определенной прокрутке
+    // function scroll() {
+    //     if (window.scrollY > 405) {
+    //         setStyle(true);
+    //     } else {
+    //         setStyle(false);
+    //     }
+    // }
+    // // добавляем эффект при загрузки страницы
+    // useEffect(() => {
+    //     window.addEventListener('scroll', scroll);
 
-        // возвращаем функцию для отмены эффекта на других страницах
-        return () => {
-            window.removeEventListener('scroll', scroll);
-        };
-    }, []);
-
-    // отменяем useEffect при unMount странички
+    //     // возвращаем функцию для отмены эффекта на других страницах
+    //     return () => {
+    //         window.removeEventListener('scroll', scroll);
+    //     };
+    // }, []);
 
     const skeleton = char || loading || error ? null : <Skeleton />;
     const spinner = loading ? <Spinner /> : null;
