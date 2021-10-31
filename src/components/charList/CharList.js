@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import useMarvelServices from '../../services/MarvelServices';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -51,32 +52,41 @@ const CharList = props => {
                 item.thumbnail ===
                 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
             return (
-                <li
-                    className='char__item'
-                    tabIndex={0}
+                <CSSTransition
                     key={item.id}
-                    onClick={() => {
-                        props.onCharSelected(item.id);
-                        focusItem(i);
-                    }}
-                    onKeyDown={e => {
-                        if (e.key === ' ' || e.key === 'Enter') {
+                    timeout={500}
+                    classNames='char__item'
+                >
+                    <li
+                        tabIndex={0}
+                        className='char__item'
+                        onClick={() => {
                             props.onCharSelected(item.id);
                             focusItem(i);
-                        }
-                    }}
-                    ref={el => (itemsRef.current[i] = el)}
-                >
-                    <img
-                        src={item.thumbnail}
-                        alt={item.name}
-                        style={style ? { objectFit: 'unset' } : null}
-                    />
-                    <div className='char__name'>{item.name}</div>
-                </li>
+                        }}
+                        onKeyDown={e => {
+                            if (e.key === ' ' || e.key === 'Enter') {
+                                props.onCharSelected(item.id);
+                                focusItem(i);
+                            }
+                        }}
+                        ref={el => (itemsRef.current[i] = el)}
+                    >
+                        <img
+                            src={item.thumbnail}
+                            alt={item.name}
+                            style={style ? { objectFit: 'unset' } : null}
+                        />
+                        <div className='char__name'>{item.name}</div>
+                    </li>
+                </CSSTransition>
             );
         });
-        return <ul className='char__grid'>{items}</ul>;
+        return (
+            <ul className='char__grid'>
+                <TransitionGroup component={null}>{items}</TransitionGroup>
+            </ul>
+        );
     }
 
     const items = renderItem(charList);
