@@ -6,7 +6,7 @@ import CharInfo from '../charInfo/CharInfo';
 import SearchForm from '../searchForm/SearchForm';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
-import './singleComicPage.scss';
+import './singlePages/singleComicPage.scss';
 import decoration from '../../resources/img/vision.png';
 
 const MainPage = () => {
