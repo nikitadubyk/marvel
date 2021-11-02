@@ -36,4 +36,16 @@
             color: $main-color;
         }
     }
+    &__char {
+        &-img {
+            width: 293px;
+            height: 293px;
+            object-fit: contain;
+        }
+    }
+}
+
+.sticky {
+    position: sticky;
+    top: 50px;
 }

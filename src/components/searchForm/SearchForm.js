@@ -30,9 +30,12 @@ const SearchForm = () => {
         <div className='find__wrapper'>
             <div className='form__success'>
                 There is! Visit {char[0].name} page?
-                <a href={char[0].wiki} className='button button__secondary'>
+                <Link
+                    to={`/character/${char[0].id}`}
+                    className='button button__secondary'
+                >
                     <div className='inner'>TO PAGE</div>
-                </a>
+                </Link>
             </div>
         </div>
     ) : (

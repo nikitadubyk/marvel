@@ -6,6 +6,7 @@ import CharInfo from '../charInfo/CharInfo';
 import SearchForm from '../searchForm/SearchForm';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
+import './singleComicPage.scss';
 import decoration from '../../resources/img/vision.png';
 
 const MainPage = () => {
@@ -23,7 +24,7 @@ const MainPage = () => {
                 <ErrorBoundary>
                     <CharList onCharSelected={onCharSelected} />
                 </ErrorBoundary>
-                <div>
+                <div className='sticky'>
                     <ErrorBoundary>
                         <CharInfo charId={selectedChar} />
                     </ErrorBoundary>
