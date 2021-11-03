@@ -1,50 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import useMarvelServices from '../../../services/MarvelServices';
-
-import Spinner from '../../spinner/Spinner';
-import ErrorMessage from '../../errorMessage/ErrorMessage';
-import AppBanner from '../../appBanner/AppBanner';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import './singleComicPage.scss';
 
-const SingleCharPage = () => {
-    const [char, setChar] = useState({});
-    const { id } = useParams();
-
-    const { loading, error, getCharacter, clearError } = useMarvelServices();
-
-    useEffect(() => {
-        updateChar(id);
-    }, [id]);
-
-    const setCharHandler = char => {
-        setChar(char);
-    };
-
-    const updateChar = id => {
-        clearError();
-        getCharacter(id).then(res => setCharHandler(res));
-    };
-
-    const spinner = loading ? <Spinner /> : null;
-    const errorMassage = error ? <ErrorMessage /> : null;
-    const content = !(loading || error || !char) ? <View data={char} /> : null;
-
-    return (
-        <>
-            <AppBanner />
-            {spinner}
-            {errorMassage}
-            {content}
-        </>
-    );
-};
-
-const View = ({ data }) => {
-    const { thumbnail, title, description } = data;
+const SingleCharPage = ({ data }) => {
+    const { thumbnail, title, description, name } = data;
     return (
         <div className='single-comic'>
+            <Helmet>
+                <meta name='description' content={`${name} char information`} />
+                <title>{name}</title>
+            </Helmet>
             <img
                 src={thumbnail}
                 alt={title}
