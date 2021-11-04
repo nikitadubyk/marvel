@@ -4,91 +4,53 @@ import PropTypes, { func } from 'prop-types';
 
 import './charInfo.scss';
 import useMarvelServices from '../../services/MarvelServices';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
+import setContent from '../../utils/setContent';
 
 const CharInfo = props => {
     const [char, setChar] = useState(null);
-    const [style, setStyle] = useState(false);
 
-    const { loading, error, getCharacter, clearError } = useMarvelServices();
+    const { getCharacter, clearError, process, setProcess } =
+        useMarvelServices();
 
     useEffect(() => {
         updateChar();
+        // eslint-disable-next-line
     }, [props.charId]);
 
     const updateChar = () => {
-        clearError();
         const { charId } = props;
         if (!charId) {
             return;
         }
 
-        getCharacter(charId).then(onCharLoaded);
+        clearError();
+        getCharacter(charId)
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'));
     };
 
     const onCharLoaded = char => {
         setChar(char);
     };
 
-    // // меняем блок в позицию fixed при определенной прокрутке
-    // function scroll() {
-    //     if (window.scrollY > 405) {
-    //         setStyle(true);
-    //     } else {
-    //         setStyle(false);
-    //     }
-    // }
-    // // добавляем эффект при загрузки страницы
-    // useEffect(() => {
-    //     window.addEventListener('scroll', scroll);
-
-    //     // возвращаем функцию для отмены эффекта на других страницах
-    //     return () => {
-    //         window.removeEventListener('scroll', scroll);
-    //     };
-    // }, []);
-
-    const skeleton = char || loading || error ? null : <Skeleton />;
-    const spinner = loading ? <Spinner /> : null;
-    const errorMassage = error ? <ErrorMessage /> : null;
-    const content = !(loading || error || !char) ? <View char={char} /> : null;
-    return (
-        <div
-            className='char__info'
-            style={
-                style
-                    ? {
-                          position: 'fixed',
-                          width: '425px',
-                          right: '507px',
-                          top: '40px',
-                      }
-                    : null
-            }
-        >
-            {skeleton}
-            {spinner}
-            {errorMassage}
-            {content}
-        </div>
-    );
+    return <div className='char__info'>{setContent(process, View, char)}</div>;
 };
 
-const View = ({ char }) => {
-    const { name, thumbnail, description, homepage, wiki, comics } = char;
-    const style =
+const View = ({ data }) => {
+    const { name, description, thumbnail, homepage, wiki, comics } = data;
+
+    let imgStyle = { objectFit: 'cover' };
+    if (
         thumbnail ===
-        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+    ) {
+        imgStyle = { objectFit: 'contain' };
+    }
+
     return (
         <>
             <div className='char__basics'>
-                <img
-                    src={thumbnail}
-                    alt={name}
-                    style={style ? { objectFit: 'contain' } : null}
-                />
+                <img src={thumbnail} alt={name} style={imgStyle} />
                 <div>
                     <div className='char__info-name'>{name}</div>
                     <div className='char__btns'>
@@ -104,18 +66,16 @@ const View = ({ char }) => {
             <div className='char__descr'>{description}</div>
             <div className='char__comics'>Comics:</div>
             <ul className='char__comics-list'>
-                {comics.length === 0
-                    ? 'There is no comics with this character'
-                    : null}
-                {comics.slice(0, 10).map((item, i) => {
+                {comics.length > 0
+                    ? null
+                    : 'There is no comics with this character'}
+                {comics.map((item, i) => {
+                    // eslint-disable-next-line
+                    if (i > 9) return;
                     return (
-                        <Link
-                            to={`/comics/${item.resourceURI.substring(43)}`}
-                            className='char__comics-item'
-                            key={i}
-                        >
+                        <li key={i} className='char__comics-item'>
                             {item.name}
-                        </Link>
+                        </li>
                     );
                 })}
             </ul>

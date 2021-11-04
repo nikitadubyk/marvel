@@ -13,11 +13,11 @@ import './SearchForm.scss';
 const SearchForm = () => {
     const [char, setChar] = useState(null);
 
-    const { clearError, getCharacterByName, loading } = useMarvelServices();
+    const { clearError, getCharacterByName, loading, process } =
+        useMarvelServices();
 
     const onCharLoaded = char => {
         setChar(char);
-        console.log(char);
     };
 
     const submitRequest = name => {

@@ -7,13 +7,32 @@ import PropTypes from 'prop-types';
 
 import './charList.scss';
 
+const setContent = (process, Component, newItemLoading) => {
+    switch (process) {
+        case 'waiting':
+            return <Spinner />;
+            break;
+        case 'loading':
+            return newItemLoading ? <Component /> : <Spinner />;
+            break;
+        case 'confirmed':
+            return <Component />;
+            break;
+        case 'error':
+            return <ErrorMessage />;
+            break;
+        default:
+            throw new Error('Unexpected process state');
+    }
+};
+
 const CharList = props => {
     const [charList, setCharList] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(false);
     const [charEnded, setCharEnded] = useState(false);
 
-    const { loading, error, getAllCharacters } = useMarvelServices();
+    const { getAllCharacters, process, setProcess } = useMarvelServices();
 
     useEffect(() => {
         onRequestChar(offset, true);
@@ -21,7 +40,9 @@ const CharList = props => {
 
     const onRequestChar = (offset, initial) => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true);
-        getAllCharacters(offset).then(res => onCharListLoaded(res));
+        getAllCharacters(offset)
+            .then(res => onCharListLoaded(res))
+            .then(() => setProcess('confirmed'));
     };
 
     const onCharListLoaded = newCharList => {
@@ -89,15 +110,9 @@ const CharList = props => {
         );
     }
 
-    const items = renderItem(charList);
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
-
     return (
         <div className='char__list'>
-            {errorMessage}
-            {spinner}
-            {items}
+            {setContent(process, () => renderItem(charList), newItemLoading)}
             <button
                 className='button button__main button__long'
                 onClick={() => onRequestChar(offset)}
