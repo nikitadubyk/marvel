@@ -17,3 +17,4 @@ You can view the application here: https://marver-test.herokuapp.com/
 - React Hooks
 - Formik
 - Yup
+- SCSS
