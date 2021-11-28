@@ -6,7 +6,6 @@ Application for the Marvel universe. You can search for a character, choose a ra
 You can view the application here: https://marver-test.herokuapp.com/
 
 ## Key features
-- Responsive design
 - Using Marvel API
 - Random character
 - Character search
